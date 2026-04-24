@@ -1,8 +1,8 @@
 <div align="center">
 
-# bsd
+# binary serialization / deserialization
 
-### A header-first, dependency-light **binary serialization / deserialization** library for modern C++23.
+### **binary serialization / deserialization** library for modern C++23 or at least what i'm trying
 
 <br>
 
