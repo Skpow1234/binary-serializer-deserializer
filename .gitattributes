@@ -1,0 +1,34 @@
+* text=auto eol=lf
+
+# Source code
+*.cpp    text diff=cpp
+*.hpp    text diff=cpp
+*.h      text diff=cpp
+*.cc     text diff=cpp
+*.cxx    text diff=cpp
+
+# Build files
+CMakeLists.txt   text
+*.cmake          text
+CMakePresets.json text
+*.json           text
+*.yml            text
+*.yaml           text
+
+# Documentation
+*.md   text
+*.txt  text
+
+# Windows-only batch files keep CRLF
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+
+# Binary assets must never be normalised
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary

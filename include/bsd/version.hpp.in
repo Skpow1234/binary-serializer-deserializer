@@ -1,0 +1,39 @@
+// SPDX-License-Identifier: MIT
+//
+// Generated from version.hpp.in by CMake. Do not edit by hand.
+//
+// @invariant The macros and constants in this file reflect exactly the
+//            project() VERSION declared in the top-level CMakeLists.txt.
+//            They are the single source of truth for the library version.
+
+#ifndef BSD_VERSION_HPP
+#define BSD_VERSION_HPP
+
+#include <cstdint>
+#include <string_view>
+
+#define BSD_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define BSD_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define BSD_VERSION_PATCH @PROJECT_VERSION_PATCH@
+
+#define BSD_VERSION_STRING "@PROJECT_VERSION@"
+
+namespace bsd::inline v1 {
+
+struct version_info {
+    std::uint32_t major;
+    std::uint32_t minor;
+    std::uint32_t patch;
+};
+
+inline constexpr version_info library_version{
+    BSD_VERSION_MAJOR,
+    BSD_VERSION_MINOR,
+    BSD_VERSION_PATCH,
+};
+
+inline constexpr std::string_view library_version_string{BSD_VERSION_STRING};
+
+} // namespace bsd::inline v1
+
+#endif // BSD_VERSION_HPP

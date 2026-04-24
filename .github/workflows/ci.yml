@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.os }} / ${{ matrix.compiler }} / ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            compiler: gcc-13
+            cc: gcc-13
+            cxx: g++-13
+            preset: ci
+            build_preset: ci
+            build_type: RelWithDebInfo
+          - os: ubuntu-24.04
+            compiler: clang-18
+            cc: clang-18
+            cxx: clang++-18
+            preset: ci
+            build_preset: ci
+            build_type: RelWithDebInfo
+          - os: macos-14
+            compiler: apple-clang
+            cc: clang
+            cxx: clang++
+            preset: ci
+            build_preset: ci
+            build_type: RelWithDebInfo
+          - os: windows-2022
+            compiler: msvc
+            preset: ci-msvc
+            build_preset: ci-msvc-release
+            build_type: Release
+
+    env:
+      CMAKE_GENERATOR: ${{ matrix.compiler == 'msvc' && 'Visual Studio 17 2022' || 'Ninja' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Ninja (Linux/macOS)
+        if: matrix.compiler != 'msvc'
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Install GCC 13 (Ubuntu)
+        if: startsWith(matrix.compiler, 'gcc')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+
+      - name: Install Clang 18 (Ubuntu)
+        if: startsWith(matrix.compiler, 'clang')
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 18
+          sudo apt-get install -y clang-18
+
+      - name: Configure (POSIX)
+        if: matrix.compiler != 'msvc'
+        env:
+          CC:  ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: cmake --preset ${{ matrix.preset }}
+
+      - name: Configure (MSVC)
+        if: matrix.compiler == 'msvc'
+        run: cmake --preset ${{ matrix.preset }}
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.build_preset }}
+
+      - name: Run smoke example (POSIX)
+        if: matrix.compiler != 'msvc'
+        run: ./build/${{ matrix.preset }}/examples/bsd_smoke
+
+      - name: Run smoke example (MSVC)
+        if: matrix.compiler == 'msvc'
+        run: ./build/${{ matrix.preset }}/examples/${{ matrix.build_type }}/bsd_smoke.exe
