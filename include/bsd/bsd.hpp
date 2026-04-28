@@ -21,7 +21,7 @@
 #include <bsd/concepts.hpp>
 #include <bsd/config.hpp>
 #include <bsd/error.hpp>
-#include <bsd/expected.hpp>
+#include <bsd/serialize_expected.hpp>
 #include <bsd/fwd.hpp>
 #include <bsd/version.hpp>
 

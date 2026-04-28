@@ -5,7 +5,7 @@
 // Milestone 04 adds `std::error_category` integration (`make_error_code`,
 // `serialize_error_category`) so `serialize_error` interoperates with
 // `std::error_code` / `std::error_condition`. Aliases and the `BSD_TRY` macros
-// live in `expected.hpp` to keep this header focused on the enum + category.
+// live in `serialize_expected.hpp` to keep this header focused on the enum + category.
 //
 // @invariant `serialize_error::none` is the zero value and represents
 //            "no error". All other enumerators denote a failure mode and

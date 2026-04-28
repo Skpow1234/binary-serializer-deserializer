@@ -2,7 +2,7 @@
 //
 // Tests for `BSD_TRY` / `BSD_TRYV` (Milestone 04).
 
-#include <bsd/expected.hpp>
+#include <bsd/serialize_expected.hpp>
 
 #include <gtest/gtest.h>
 

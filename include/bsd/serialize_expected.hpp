@@ -1,6 +1,13 @@
 // SPDX-License-Identifier: MIT
 //
-// expected.hpp -- `std::expected` aliases and monadic propagation macros.
+// serialize_expected.hpp -- `std::expected` aliases and monadic macros.
+//
+// This file is intentionally *not* named `expected.hpp`: on several
+// toolchains `#include <expected>` from a header whose path ends in
+// `.../expected.hpp` incorrectly resolves the angle-bracket include back to
+// that same file, skipping the standard library entirely. The result is that
+// `std::expected` appears "missing" even though `-std=c++23` is in effect.
+// Keeping a distinct basename avoids that entire class of bugs.
 //
 // @invariant `expected<T>` is always `std::expected<T, serialize_error>`.
 //            No other error type is permitted at this abstraction boundary.
@@ -8,14 +15,15 @@
 //            return type is `expected<U>` for some `U` (including `void`),
 //            because failure is propagated via `return std::unexpected(...)`.
 
-#ifndef BSD_EXPECTED_HPP
-#define BSD_EXPECTED_HPP
+#ifndef BSD_SERIALIZE_EXPECTED_HPP
+#define BSD_SERIALIZE_EXPECTED_HPP
 
 #include <bsd/error.hpp>
 
 #include <expected>
 #include <type_traits>
 #include <utility>
+#include <version>
 
 namespace bsd::inline v1 {
 
@@ -58,4 +66,4 @@ using unexpected_serialize = std::unexpected<serialize_error>;
             return ::std::unexpected(BSD_TRY_PRIVATE_LINE(_bsd_tryv_).error());                    \
     } while (false)
 
-#endif // BSD_EXPECTED_HPP
+#endif // BSD_SERIALIZE_EXPECTED_HPP
