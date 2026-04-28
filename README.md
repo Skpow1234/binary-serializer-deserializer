@@ -9,7 +9,7 @@
 [![C++23](https://img.shields.io/badge/C%2B%2B-23-00599C?logo=cplusplus&logoColor=white)](https://en.cppreference.com/w/cpp/23)
 [![CMake](https://img.shields.io/badge/CMake-%E2%89%A5%203.26-064F8C?logo=cmake&logoColor=white)](https://cmake.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Header-only](https://img.shields.io/badge/header--only-yes-brightgreen)](include/bsd)
+[![Composition](https://img.shields.io/badge/composition-headers%20%2B%201%20cpp-blue)](src)
 
 [![Linux](https://img.shields.io/badge/Linux-supported-FCC624?logo=linux&logoColor=black)](#)
 [![macOS](https://img.shields.io/badge/macOS-supported-000000?logo=apple&logoColor=white)](#)
@@ -102,7 +102,9 @@ The library is designed around four properties:
 
 - **CMake ≥ 3.26** with `CMakePresets.json` (`dev-debug`, `dev-release`, `ci`, `ci-msvc`).
 - **Ninja** as the default generator on Linux/macOS; **Visual Studio 17 2022** on Windows.
-- Header-only `INTERFACE` library exported as `bsd::bsd`.
+- Mostly header-only: public API lives under `include/bsd/`, plus one small
+  compiled unit (`src/error_category.cpp`) so `std::error_category` has a
+  single program-wide singleton. Link target `bsd::bsd` (static library).
 - Versioning via a single `project(... VERSION ...)` declaration that flows through a configured `include/bsd/version.hpp` — no version constant is hardcoded anywhere else.
 
 ### Quality gates
@@ -179,6 +181,8 @@ binary-serializer-deserializer/
 ├── cmake/                    # ProjectOptions, CompilerWarnings, ...
 ├── docs/                     # Design notes, format spec, invariants
 ├── include/bsd/              # Public headers (inline namespace v1)
+├── src/                      # Minimal compiled units (error category, …)
+├── tests/                    # GoogleTest suite (`ctest`)
 └── examples/                 # Smoke / usage examples
 ```
 

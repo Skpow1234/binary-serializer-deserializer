@@ -85,6 +85,14 @@ jobs:
       - name: Build
         run: cmake --build --preset ${{ matrix.build_preset }}
 
+      - name: Test (POSIX)
+        if: matrix.compiler != 'msvc'
+        run: ctest --test-dir build/${{ matrix.preset }} --output-on-failure
+
+      - name: Test (MSVC)
+        if: matrix.compiler == 'msvc'
+        run: ctest --test-dir build/${{ matrix.preset }} -C ${{ matrix.build_type }} --output-on-failure
+
       - name: Run smoke example (POSIX)
         if: matrix.compiler != 'msvc'
         run: ./build/${{ matrix.preset }}/examples/bsd_smoke
@@ -168,6 +176,9 @@ jobs:
       - name: Run smoke under sanitizer
         run: ./build/${{ matrix.preset }}/examples/bsd_smoke
 
+      - name: Test under sanitizer
+        run: ctest --test-dir build/${{ matrix.preset }} --output-on-failure
+
   coverage:
     name: coverage / gcc-13
     runs-on: ubuntu-24.04
@@ -194,3 +205,6 @@ jobs:
 
       - name: Run smoke (instrumented)
         run: ./build/coverage/examples/bsd_smoke
+
+      - name: Test (instrumented)
+        run: ctest --test-dir build/coverage --output-on-failure

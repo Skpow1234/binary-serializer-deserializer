@@ -29,18 +29,26 @@ include(CompilerWarnings)
 include(Sanitizers)
 
 # -----------------------------------------------------------------------------
-# Public interface library (header-only for now; M03+ may add compiled units).
+# Public library.
+#
+# Milestone 04 introduces a single compiled translation unit so that
+# `serialize_error_category()` has program-wide unique static storage duration.
+# Everything else remains header-only.
 # -----------------------------------------------------------------------------
-add_library(bsd INTERFACE)
+add_library(bsd STATIC
+    src/error_category.cpp
+)
 add_library(bsd::bsd ALIAS bsd)
 
-target_compile_features(bsd INTERFACE cxx_std_23)
+target_compile_features(bsd PUBLIC cxx_std_23)
 
-target_include_directories(bsd INTERFACE
+target_include_directories(bsd PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
     "$<INSTALL_INTERFACE:include>"
 )
+
+bsd_set_warnings(bsd PRIVATE)
 
 # Generate include/bsd/version.hpp from the project version (no hardcoding).
 configure_file(
@@ -56,7 +64,12 @@ if(BSD_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-# tests/, fuzz/, benchmarks/, tools/ land in later milestones.
+if(BSD_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
+# fuzz/, benchmarks/, tools/ land in later milestones.
 
 # -----------------------------------------------------------------------------
 # Install / packaging are deferred to Milestone 36.

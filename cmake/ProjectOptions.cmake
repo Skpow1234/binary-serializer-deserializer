@@ -7,7 +7,7 @@
 include_guard(GLOBAL)
 
 option(BSD_BUILD_EXAMPLES   "Build example programs"                ${BSD_IS_TOPLEVEL})
-option(BSD_BUILD_TESTS      "Build the unit-test suite"             OFF) # M04+
+option(BSD_BUILD_TESTS      "Build the unit-test suite"             ${BSD_IS_TOPLEVEL})
 option(BSD_BUILD_BENCHMARKS "Build the micro-benchmark suite"       OFF) # M35
 option(BSD_BUILD_FUZZERS    "Build the libFuzzer harnesses"         OFF) # M33
 option(BSD_BUILD_TOOLS      "Build CLI tools (bsd-dump, ...)"       OFF) # M37
