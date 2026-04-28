@@ -18,6 +18,14 @@
             }
         },
         {
+            "name": "san-base",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        },
+        {
             "name": "dev-debug",
             "displayName": "Developer (Debug)",
             "inherits": "base",
@@ -54,30 +62,71 @@
             "cacheVariables": {
                 "CMAKE_CONFIGURATION_TYPES": "Debug;Release"
             }
+        },
+        {
+            "name": "asan",
+            "displayName": "AddressSanitizer",
+            "inherits": "san-base",
+            "cacheVariables": {
+                "BSD_ENABLE_ASAN": "ON"
+            }
+        },
+        {
+            "name": "ubsan",
+            "displayName": "UndefinedBehaviorSanitizer",
+            "inherits": "san-base",
+            "cacheVariables": {
+                "BSD_ENABLE_UBSAN": "ON"
+            }
+        },
+        {
+            "name": "asan-ubsan",
+            "displayName": "AddressSanitizer + UndefinedBehaviorSanitizer",
+            "inherits": "san-base",
+            "cacheVariables": {
+                "BSD_ENABLE_ASAN": "ON",
+                "BSD_ENABLE_UBSAN": "ON"
+            }
+        },
+        {
+            "name": "tsan",
+            "displayName": "ThreadSanitizer",
+            "inherits": "san-base",
+            "cacheVariables": {
+                "BSD_ENABLE_TSAN": "ON"
+            }
+        },
+        {
+            "name": "msan",
+            "displayName": "MemorySanitizer (Clang only)",
+            "inherits": "san-base",
+            "cacheVariables": {
+                "BSD_ENABLE_MSAN": "ON",
+                "CMAKE_C_COMPILER":  "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "coverage",
+            "displayName": "Code coverage instrumentation",
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BSD_ENABLE_COVERAGE": "ON"
+            }
         }
     ],
     "buildPresets": [
-        {
-            "name": "dev-debug",
-            "configurePreset": "dev-debug"
-        },
-        {
-            "name": "dev-release",
-            "configurePreset": "dev-release"
-        },
-        {
-            "name": "ci",
-            "configurePreset": "ci"
-        },
-        {
-            "name": "ci-msvc-debug",
-            "configurePreset": "ci-msvc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "ci-msvc-release",
-            "configurePreset": "ci-msvc",
-            "configuration": "Release"
-        }
+        { "name": "dev-debug",       "configurePreset": "dev-debug" },
+        { "name": "dev-release",     "configurePreset": "dev-release" },
+        { "name": "ci",              "configurePreset": "ci" },
+        { "name": "ci-msvc-debug",   "configurePreset": "ci-msvc", "configuration": "Debug" },
+        { "name": "ci-msvc-release", "configurePreset": "ci-msvc", "configuration": "Release" },
+        { "name": "asan",            "configurePreset": "asan" },
+        { "name": "ubsan",           "configurePreset": "ubsan" },
+        { "name": "asan-ubsan",      "configurePreset": "asan-ubsan" },
+        { "name": "tsan",            "configurePreset": "tsan" },
+        { "name": "msan",            "configurePreset": "msan" },
+        { "name": "coverage",        "configurePreset": "coverage" }
     ]
 }

@@ -92,3 +92,105 @@ jobs:
       - name: Run smoke example (MSVC)
         if: matrix.compiler == 'msvc'
         run: ./build/${{ matrix.preset }}/examples/${{ matrix.build_type }}/bsd_smoke.exe
+
+  sanitizers:
+    name: sanitizer / ${{ matrix.preset }} / ${{ matrix.compiler }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - preset: asan
+            compiler: clang-18
+            cc:  clang-18
+            cxx: clang++-18
+          - preset: ubsan
+            compiler: clang-18
+            cc:  clang-18
+            cxx: clang++-18
+          - preset: asan-ubsan
+            compiler: clang-18
+            cc:  clang-18
+            cxx: clang++-18
+          - preset: tsan
+            compiler: clang-18
+            cc:  clang-18
+            cxx: clang++-18
+          - preset: msan
+            compiler: clang-18
+            cc:  clang-18
+            cxx: clang++-18
+          - preset: asan-ubsan
+            compiler: gcc-13
+            cc:  gcc-13
+            cxx: g++-13
+          - preset: tsan
+            compiler: gcc-13
+            cc:  gcc-13
+            cxx: g++-13
+
+    env:
+      ASAN_OPTIONS:  "halt_on_error=1:abort_on_error=1:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:detect_leaks=1"
+      UBSAN_OPTIONS: "halt_on_error=1:abort_on_error=1:print_stacktrace=1"
+      TSAN_OPTIONS:  "halt_on_error=1:second_deadlock_stack=1"
+      MSAN_OPTIONS:  "halt_on_error=1:abort_on_error=1:print_stats=1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Install GCC 13
+        if: startsWith(matrix.compiler, 'gcc')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+
+      - name: Install Clang 18
+        if: startsWith(matrix.compiler, 'clang')
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 18
+          sudo apt-get install -y clang-18
+
+      - name: Configure
+        env:
+          CC:  ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: cmake --preset ${{ matrix.preset }}
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Run smoke under sanitizer
+        run: ./build/${{ matrix.preset }}/examples/bsd_smoke
+
+  coverage:
+    name: coverage / gcc-13
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Install GCC 13 + lcov
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13 lcov
+
+      - name: Configure
+        env:
+          CC:  gcc-13
+          CXX: g++-13
+        run: cmake --preset coverage
+
+      - name: Build
+        run: cmake --build --preset coverage
+
+      - name: Run smoke (instrumented)
+        run: ./build/coverage/examples/bsd_smoke

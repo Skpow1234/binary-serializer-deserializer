@@ -16,10 +16,11 @@ option(BSD_WARNINGS_AS_ERRORS "Treat compiler warnings as errors"   ON)
 
 # Sanitizer toggles are wired up in Milestone 02; declared here so the option
 # surface is centralised and consumers see them with `cmake -LH`.
-option(BSD_ENABLE_ASAN  "Enable AddressSanitizer"                   OFF)
-option(BSD_ENABLE_UBSAN "Enable UndefinedBehaviorSanitizer"         OFF)
-option(BSD_ENABLE_TSAN  "Enable ThreadSanitizer"                    OFF)
-option(BSD_ENABLE_MSAN  "Enable MemorySanitizer (Clang only)"       OFF)
+option(BSD_ENABLE_ASAN     "Enable AddressSanitizer"                OFF)
+option(BSD_ENABLE_UBSAN    "Enable UndefinedBehaviorSanitizer"      OFF)
+option(BSD_ENABLE_TSAN     "Enable ThreadSanitizer"                 OFF)
+option(BSD_ENABLE_MSAN     "Enable MemorySanitizer (Clang only)"    OFF)
+option(BSD_ENABLE_COVERAGE "Enable code-coverage instrumentation"   OFF)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING

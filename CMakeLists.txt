@@ -26,6 +26,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(ProjectOptions)
 include(CompilerWarnings)
+include(Sanitizers)
 
 # -----------------------------------------------------------------------------
 # Public interface library (header-only for now; M03+ may add compiled units).
