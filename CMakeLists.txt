@@ -25,10 +25,9 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(ProjectOptions)
+include(CxxStdlib)
 include(CompilerWarnings)
 include(Sanitizers)
-include(CxxStdlib)
-bsd_apply_cxx_stdlib_directory()
 
 # -----------------------------------------------------------------------------
 # Public library.
