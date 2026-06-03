@@ -28,6 +28,7 @@ include(ProjectOptions)
 include(CompilerWarnings)
 include(Sanitizers)
 include(CxxStdlib)
+bsd_apply_cxx_stdlib_directory()
 
 # -----------------------------------------------------------------------------
 # Public library.
