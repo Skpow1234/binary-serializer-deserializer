@@ -18,6 +18,15 @@ FetchContent_Declare(
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 FetchContent_MakeAvailable(googletest)
 
+# GoogleTest must use the same sanitizer flags as the test executable (required
+# for MSan/ASan/TSan link compatibility on CI).
+if(TARGET gtest)
+    bsd_set_sanitizers(gtest)
+endif()
+if(TARGET gtest_main)
+    bsd_set_sanitizers(gtest_main)
+endif()
+
 add_executable(bsd_tests
     error_category_test.cpp
     try_macro_test.cpp

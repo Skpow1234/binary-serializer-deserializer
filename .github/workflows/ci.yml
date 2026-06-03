@@ -188,7 +188,9 @@ jobs:
       - name: Run smoke under sanitizer
         run: ./build/${{ matrix.preset }}/examples/bsd_smoke
 
+      # MSan preset builds smoke only (no GTest): stock libstdc++ is not instrumented.
       - name: Test under sanitizer
+        if: matrix.preset != 'msan'
         run: ctest --test-dir build/${{ matrix.preset }} --output-on-failure
 
   coverage:

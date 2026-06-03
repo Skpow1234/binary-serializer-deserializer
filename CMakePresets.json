@@ -99,10 +99,12 @@
         },
         {
             "name": "msan",
-            "displayName": "MemorySanitizer (Clang only)",
+            "displayName": "MemorySanitizer (Clang only, smoke only)",
+            "description": "Builds library + smoke under MSan. Unit tests are off: GoogleTest and stock libstdc++ are not MSan-instrumented on default Linux runners.",
             "inherits": "san-base",
             "cacheVariables": {
                 "BSD_ENABLE_MSAN": "ON",
+                "BSD_BUILD_TESTS": "OFF",
                 "CMAKE_C_COMPILER":  "clang",
                 "CMAKE_CXX_COMPILER": "clang++"
             }

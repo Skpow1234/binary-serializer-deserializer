@@ -52,6 +52,7 @@ target_include_directories(bsd PUBLIC
 target_link_libraries(bsd PUBLIC tl::expected)
 
 bsd_set_warnings(bsd PRIVATE)
+bsd_set_sanitizers(bsd PRIVATE)
 
 # Generate include/bsd/version.hpp from the project version (no hardcoding).
 configure_file(
@@ -65,6 +66,17 @@ configure_file(
 # -----------------------------------------------------------------------------
 if(BSD_BUILD_EXAMPLES)
     add_subdirectory(examples)
+endif()
+
+# GoogleTest + stock libstdc++ on Linux are not built with MSan; linking/running
+# tests would trip MSan at build-time discovery or at ctest. The `msan` preset
+# keeps BSD_BUILD_TESTS=OFF; this guard covers ad-hoc -DBSD_ENABLE_MSAN=ON.
+if(BSD_BUILD_TESTS AND BSD_ENABLE_MSAN)
+    message(STATUS
+        "BSD: BSD_BUILD_TESTS disabled while BSD_ENABLE_MSAN is ON "
+        "(requires an MSan-instrumented C++ standard library to run GTest)."
+    )
+    set(BSD_BUILD_TESTS OFF CACHE BOOL "Build the unit-test suite" FORCE)
 endif()
 
 if(BSD_BUILD_TESTS)

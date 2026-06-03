@@ -112,7 +112,7 @@ The library is designed around four properties:
 | Concern              | Tool / mechanism                                            |
 |----------------------|-------------------------------------------------------------|
 | Warnings-as-errors   | Centralised in `cmake/CompilerWarnings.cmake` (GCC / Clang / MSVC) |
-| Memory safety        | **AddressSanitizer**, **MemorySanitizer** (Clang)           |
+| Memory safety        | **AddressSanitizer**, **MemorySanitizer** (Clang; CI MSan builds library + smoke only) |
 | Undefined behaviour  | **UndefinedBehaviorSanitizer**                              |
 | Data races           | **ThreadSanitizer**                                         |
 | Static analysis      | **clang-tidy** (`bugprone-*`, `cert-*`, `cppcoreguidelines-*`, `modernize-*`, `performance-*`, …) |
