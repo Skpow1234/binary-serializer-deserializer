@@ -27,6 +27,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(ProjectOptions)
 include(CompilerWarnings)
 include(Sanitizers)
+include(CxxStdlib)
 
 # -----------------------------------------------------------------------------
 # Public library.
@@ -49,6 +50,7 @@ target_include_directories(bsd PUBLIC
 )
 
 bsd_set_warnings(bsd PRIVATE)
+bsd_apply_cxx_stdlib(bsd PUBLIC)
 
 # Generate include/bsd/version.hpp from the project version (no hardcoding).
 configure_file(

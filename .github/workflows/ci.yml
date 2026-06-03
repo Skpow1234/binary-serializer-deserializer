@@ -66,10 +66,16 @@ jobs:
       - name: Install Clang 18 (Ubuntu)
         if: startsWith(matrix.compiler, 'clang')
         run: |
+          sudo apt-get update
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 18
-          sudo apt-get install -y clang-18
+          sudo apt-get install -y \
+            clang-18 \
+            g++-13 \
+            libstdc++-13-dev \
+            libc++-18-dev \
+            libc++abi-18-dev
 
       - name: Configure (POSIX)
         if: matrix.compiler != 'msvc'
@@ -159,10 +165,16 @@ jobs:
       - name: Install Clang 18
         if: startsWith(matrix.compiler, 'clang')
         run: |
+          sudo apt-get update
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 18
-          sudo apt-get install -y clang-18
+          sudo apt-get install -y \
+            clang-18 \
+            g++-13 \
+            libstdc++-13-dev \
+            libc++-18-dev \
+            libc++abi-18-dev
 
       - name: Configure
         env:
