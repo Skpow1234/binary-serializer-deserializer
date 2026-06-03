@@ -31,7 +31,7 @@ using expected = tl::expected<T, serialize_error>;
 using unexpected_serialize = tl::unexpected<serialize_error>;
 
 [[nodiscard]] constexpr unexpected_serialize make_unexpected(serialize_error e) noexcept {
-    return unexpected_serialize{tl::in_place, e};
+    return unexpected_serialize{e};
 }
 
 } // namespace bsd::inline v1
@@ -45,7 +45,7 @@ using unexpected_serialize = tl::unexpected<serialize_error>;
 #define BSD_TRY(var, expr)                                                                         \
     auto BSD_TRY_PRIVATE_LINE(_bsd_try_) = (expr);                                                 \
     if (!BSD_TRY_PRIVATE_LINE(_bsd_try_)) [[unlikely]]                                             \
-        return ::tl::unexpected(BSD_TRY_PRIVATE_LINE(_bsd_try_).error());                         \
+        return ::bsd::make_unexpected(BSD_TRY_PRIVATE_LINE(_bsd_try_).error());                    \
     auto var = ::std::move(*BSD_TRY_PRIVATE_LINE(_bsd_try_))
 
 // Like `BSD_TRY`, but for `expected<void, serialize_error>`: no binding, only
@@ -54,7 +54,7 @@ using unexpected_serialize = tl::unexpected<serialize_error>;
     do {                                                                                           \
         auto BSD_TRY_PRIVATE_LINE(_bsd_tryv_) = (expr);                                            \
         if (!BSD_TRY_PRIVATE_LINE(_bsd_tryv_)) [[unlikely]]                                        \
-            return ::tl::unexpected(BSD_TRY_PRIVATE_LINE(_bsd_tryv_).error());                    \
+            return ::bsd::make_unexpected(BSD_TRY_PRIVATE_LINE(_bsd_tryv_).error());             \
     } while (false)
 
 #endif // BSD_SERIALIZE_EXPECTED_HPP

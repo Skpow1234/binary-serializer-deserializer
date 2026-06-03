@@ -1,7 +1,6 @@
 # tl::expected — single-header, API-compatible with std::expected.
 #
-# Used instead of <expected> so Clang on Ubuntu CI (old libstdc++ by default)
-# does not break builds. Pin the tag; no hardcoded paths in consumer code.
+# Populated via FetchContent without building upstream's test suite.
 
 include_guard(GLOBAL)
 include(FetchContent)
@@ -13,4 +12,15 @@ FetchContent_Declare(
     GIT_SHALLOW    TRUE
 )
 
-FetchContent_MakeAvailable(tl_expected)
+FetchContent_GetProperties(tl_expected)
+if(NOT tl_expected_POPULATED)
+    FetchContent_Populate(tl_expected)
+endif()
+
+add_library(bsd_tl_expected INTERFACE)
+add_library(tl::expected ALIAS bsd_tl_expected)
+target_include_directories(
+    bsd_tl_expected
+    INTERFACE
+        "${tl_expected_SOURCE_DIR}/include"
+)
