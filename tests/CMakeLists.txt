@@ -25,7 +25,6 @@ add_executable(bsd_tests
 target_link_libraries(bsd_tests PRIVATE bsd::bsd GTest::gtest_main)
 bsd_set_warnings(bsd_tests PRIVATE)
 bsd_set_sanitizers(bsd_tests)
-bsd_apply_cxx_stdlib(bsd_tests PRIVATE)
 set_target_properties(bsd_tests PROPERTIES
     CXX_STANDARD          23
     CXX_STANDARD_REQUIRED ON

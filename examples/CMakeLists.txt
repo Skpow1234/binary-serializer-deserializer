@@ -8,7 +8,6 @@ add_executable(bsd_smoke smoke.cpp)
 target_link_libraries(bsd_smoke PRIVATE bsd::bsd)
 bsd_set_warnings(bsd_smoke PRIVATE)
 bsd_set_sanitizers(bsd_smoke)
-bsd_apply_cxx_stdlib(bsd_smoke PRIVATE)
 set_target_properties(bsd_smoke PROPERTIES
     CXX_STANDARD          23
     CXX_STANDARD_REQUIRED ON

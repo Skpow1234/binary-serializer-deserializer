@@ -14,7 +14,7 @@ using bsd::serialize_error;
 [[nodiscard]] static expected<int> returns_int(int v) { return v; }
 
 [[nodiscard]] static expected<int> fails(serialize_error e) {
-    return std::unexpected(e);
+    return bsd::make_unexpected(e);
 }
 
 [[nodiscard]] static expected<long> chain_success() {
@@ -31,7 +31,7 @@ using bsd::serialize_error;
 [[nodiscard]] static expected<void> void_ok() { return {}; }
 
 [[nodiscard]] static expected<void> void_fail() {
-    return std::unexpected(serialize_error::io_error);
+    return bsd::make_unexpected(serialize_error::io_error);
 }
 
 [[nodiscard]] static expected<int> uses_void_ok() {
